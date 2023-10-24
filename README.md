@@ -1,36 +1,57 @@
-# Cyclic - Express Hello World
+# ruffle-selfhosted
 
-This is a basic starter Expressjs app with:
+ruffle-selfhosted is the intended way to get Ruffle onto your website.
 
-- Static file hosting
-- Logging Middleware
-- Catch-all handler that echoes request info
+You may either include it and forget about it, and we will polyfill existing Flash content,
+or use our APIs for custom configurations or more advanced usages of the Ruffle player.
 
-## Local Quick Start
+## Using ruffle-selfhosted
 
-- Clone to your local
-- Install dependencies `npm install`
-- Run locally `npm serve`
-- Make requests
-  - Browser: `http://localhost:3000/some/path?q=query+one&q=second+query&single=value`
-  - Command line: `curl -i -XGET "http://localhost:3000/cmd/line-curl"`
+For more examples and in-depth documentation on how to use Ruffle on your website, please
+[check out our wiki](https://github.com/ruffle-rs/ruffle/wiki/Using-Ruffle#web).
 
-## Deploy in under 10 seconds
+### Host Ruffle
 
-[![Deploy to Cyclic](https://deploy.cyclic.app/button.svg)](https://deploy.cyclic.app/)
-- Sets up instant continuous deployment on `git push`
-- Realtime backend logs and API request monitoring
+The `selfhosted` package is configured for websites that do not use bundlers or npm and just want
+to get up and running. If you'd prefer to use Ruffle through npm and a bundler, please 
+[refer to ruffle core](https://github.com/ruffle-rs/ruffle/tree/master/web/packages/core).
 
-### Cyclic Runtime
+Before you can get started with using Ruffle on your website, you must host its files yourself.
+Either take the [latest build](https://github.com/ruffle-rs/ruffle/releases)
+or [build it yourself](https://github.com/ruffle-rs/ruffle/blob/master/web/README.md), and make these files accessible by your web server.
 
-- Cyclic hosts your app on serverless infrastructure. That means there is no guarantee of memory or file system persistence between requests.
-- The runtime expects a nodejs entry point defined as:
-  - package.json "main" field defines the entry point file (if missing uses index.js)
-  - Entry point starts a server on `process.env.PORT`
+Please note that the `.wasm` file must be served properly, and some web servers may not do that
+correctly out of the box. Please see [our wiki](https://github.com/ruffle-rs/ruffle/wiki/Using-Ruffle#configure-wasm-mime-type)
+for instructions on how to configure this, if you encounter a `Incorrect response MIME type` error.
 
-## Say Hi
+### "Plug and Play"
 
-Ask a question or give us a shout out:
+If you have an existing website with flash content, you can simply include Ruffle as a script and
+our polyfill magic will replace everything for you. No fuss, no mess.
 
-- 💌 hello@cyclic.sh
-- 🐣 https://twitter.com/cyclicsoftware
+```html
+<script src="path/to/ruffle/ruffle.js"></script>
+```
+
+### Javascript API
+
+If you want to control the Ruffle player, you may use our Javascript API.
+
+```html
+<script>
+    window.RufflePlayer = window.RufflePlayer || {};
+
+    window.addEventListener("DOMContentLoaded", () => {
+        let ruffle = window.RufflePlayer.newest();
+        let player = ruffle.createPlayer();
+        let container = document.getElementById("container");
+        container.appendChild(player);
+        player.load("movie.swf");
+    });
+</script>
+<script src="path/to/ruffle/ruffle.js"></script>
+```
+
+## Building, testing or contributing
+
+Please see [the ruffle-web README](https://github.com/ruffle-rs/ruffle/blob/master/web/README.md).
